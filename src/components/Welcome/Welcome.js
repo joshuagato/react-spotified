@@ -17,9 +17,7 @@ class Welcome extends Component {
 
     render() {
         
-        let form = this.state.registered ? 
-                    <Login sess={this.props.sess} switchForm={this.formSwitchHandler} details={this.props.details} /> : 
-                    <Register switchForm={this.formSwitchHandler} />
+        let form = this.state.registered ? <Login switchForm={this.formSwitchHandler} /> : <Register switchForm={this.formSwitchHandler} />
 
         return (
             <div className="welcome">

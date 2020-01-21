@@ -1,45 +1,62 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 // import logo from './logo.svg';
 import './App.css';
 import Welcome from './components/Welcome/Welcome';
-import NotFound from './components/NotFound/NotFound';
+// import NotFound from './components/NotFound/NotFound';
 import MusicHome from './components/MusicHome/MusicHome';
+import Logout from './components/Welcome/Logout/Logout';
 import Experiment from './components/Experiment/Experiment';
+import * as actions from './store/actions/index';
 
 class App extends Component {
 
-  state = {
-    username: '',
-    password: '',
-    fullname: null
-  }
-
-  getCredentials = (un, pw) => {
-    this.setState({ username: un, password: pw });
-  }
-
-  sessionHandler = (sessionname) => {
-    this.setState({ fullname: sessionname });
-  }
-
   componentDidMount() {
-    // console.log(localStorage.getItem('name'));
-    // console.log(localStorage.name);
+    this.props.onTryAutoSignin();
   }
 
   render() {
+    let routes = (
+      <Switch>
+        <Route path='/' exact render={(props) => <Welcome {...props} />} />
+        <Route path='/experiment' exact render={(props) => <Experiment {...props} />} />
+        <Redirect to='/' />
+        {/* <Route component={NotFound} /> */}
+      </Switch>
+    );
+
+    if(this.props.isAuthenticated) {
+      routes = (
+        <Switch>
+          <Route path='/music-home' render={(props) => <MusicHome {...props} />} />
+          <Logout path='/logout' component={Logout} />
+          <Redirect to='/music-home' />
+          {/* <Route component={NotFound} /> */}
+        </Switch>
+      );
+    }
     return (
       <div className="App">
-        <Switch>
-          <Route path='/' exact render={(props) => <Welcome {...props} sess={this.sessionHandler} details={this.getCredentials} />} />
-          {localStorage.name !== undefined ? <Route path='/music-home' exact render={(props) => <MusicHome {...props} />} /> : <Redirect to='/' /> }
-          <Route path='/experiment' exact render={(props) => <Experiment {...props} />} />
-          <Route component={NotFound} />
-        </Switch>
+        { routes }
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.token !== null,
+    // isAuthenticated: state.auth.isAuthenticated,
+    token: state.auth.token
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignin: () => dispatch(actions.authCheckState())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

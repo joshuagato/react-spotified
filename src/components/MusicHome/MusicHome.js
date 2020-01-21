@@ -16,10 +16,13 @@ import StoneBwoy from '../../assets/artwork/stonebwoy.jpg';
 
 class MusicHome extends Component {
 
+    componentDidMount() {
+        if(this.props.location.search === '') this.props.history.push('/music-home?browse');
+    }
+
     render() {
+        // I NEEED TO FIX A BUG HERE
         let param = this.props.location.search;
-        
-        if(param === '') this.props.history.push('/music-home?browse');
 
         return (
             <div className="music-home">

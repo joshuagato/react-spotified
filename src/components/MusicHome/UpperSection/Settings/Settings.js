@@ -10,8 +10,7 @@ class Settings extends Component {
     }
 
     logoutHandler = () => {
-        localStorage.removeItem('name');
-        this.props.history.replace('/');
+        this.props.history.replace('/logout');
     }
 
     render() {
