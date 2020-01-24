@@ -38,8 +38,6 @@ class Register extends Component {
     }
 
     render() {
-        console.log("details", this.props.details)
-        console.log("errors", this.props.errors)
         return (
             <div className="register">
                 <h2>Create your your account</h2>

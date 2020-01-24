@@ -14,11 +14,10 @@ const registerFailure = errors => {
     };
 };
 export const registerUser = userInput => {
-    console.log(userInput);
     return dispatch => {
         const graphqlQuery = {
             query: `
-                query RegisterUser($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
+                mutation RegisterUser($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
                     createUser(userInput: { firstname: $firstname, lastname: $lastname, email: $email, password: $password }) {
                         id firstname lastname email
                     }
@@ -32,6 +31,7 @@ export const registerUser = userInput => {
             
             dispatch(registerSuccess(response.data.data));
             // dispatch(registerSuccess(response.data.data.createUser));
+            // A Redirect and/or success message has to be displayed to the user
         })
         .catch(error => {
             // console.log(error.response.data.errors[0].message); //we can map through this array

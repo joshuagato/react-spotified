@@ -14,7 +14,7 @@ export class Songs extends Component {
         numofsongs: ''
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         const albumId = new URLSearchParams(window.location.search).get('alid');
         const artistId = new URLSearchParams(window.location.search).get('arid');
 

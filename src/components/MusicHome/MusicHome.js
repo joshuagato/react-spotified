@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './MusicHome.scss';
+import { connect } from 'react-redux';
 
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +12,7 @@ import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 
 import LowerSection from './LowerSection/LowerSection';
 import UpperSection from './UpperSection/UpperSection';
+import * as actions from '../../store/actions/index';
 
 import StoneBwoy from '../../assets/artwork/stonebwoy.jpg';
 
@@ -18,10 +20,21 @@ class MusicHome extends Component {
 
     componentDidMount() {
         if(this.props.location.search === '') this.props.history.push('/music-home?browse');
+        
+        // Fetching the logged in user's details
+       this.props.onFetchUser(this.props.userId);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.userData.firstname !== this.props.userData.firstname || 
+            prevProps.userData.lastname !== this.props.userData.lastname) {
+                
+            this.props.onFetchUser(this.props.userId);
+        }
     }
 
     render() {
-        // I NEEED TO FIX A BUG HERE
+        // I NEEED TO FIX A BUG HERE || I'VE FIXED IT
         let param = this.props.location.search;
 
         return (
@@ -37,7 +50,7 @@ class MusicHome extends Component {
                 </div>
 
                 {/* Upper Section */}
-                <UpperSection urlParam={param} name="Joshua Gato" />
+                <UpperSection urlParam={param} name={this.props.userData.firstname + ' ' + this.props.userData.lastname} />
 
 
                 {/* Lower Section */}
@@ -48,4 +61,18 @@ class MusicHome extends Component {
     }
 }
 
-export default MusicHome;
+const mapStateToProps = state => {
+    return {
+        userId: state.auth.userId,
+        userData: state.userDet.userDataForAll,
+        // userData: state.userDet.userDataForHome,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchUser: (userId) => dispatch(actions.fetchUserForMusicHome(userId)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MusicHome);

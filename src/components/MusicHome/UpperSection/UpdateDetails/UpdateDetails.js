@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import './UpdateDetails.scss';
+import { connect } from 'react-redux';
 
 import Form from './Form/Form';
 import Input from './Input/Input';
+import * as actions from '../../../../store/actions/index';
 
 export class UpdateDetails extends Component {
 
     state = {
         
-        emailForm: {
-            email: ''
+        detailForm: {
+            id: this.props.userId,
+            firstname: this.props.userData.firstname,
+            lastname: this.props.userData.lastname,
+            email: this.props.userData.email
         },        
         passwordForm: {
             currentPassword: '',
@@ -19,15 +24,13 @@ export class UpdateDetails extends Component {
         }
     }
 
-    nameChangeInputHandler = (event) => {
-        const target = event.target;
+    detailsChangeInputHandler = (event) => {
         
-        const updatedState = { ...this.state.emailForm };
-        updatedState.email = target.value
+        const updatedState = { ...this.state.detailForm };
+        updatedState[event.target.name] = event.target.value
         
-        this.setState({ emailForm: updatedState });
+        this.setState({ detailForm: updatedState });
     };
-
     pwdChangeInputHandler = (event) => {
 
         const updatedState = { ...this.state.passwordForm };
@@ -36,25 +39,48 @@ export class UpdateDetails extends Component {
         this.setState({ passwordForm: updatedState });
     };
     
-    nameChangeHandler = (event) => {
-        event.preventDefault();
-    }
 
+    detailsChangeHandler = (event) => {
+        event.preventDefault();
+
+        this.props.onUpdateDetails(this.state.detailForm, this.props.token);
+    }
     passwordUpdateHandler = (event) => {
         event.preventDefault();
+        
+        this.props.onUpdatePassword(this.state.passwordForm, this.props.token);
     };
 
+    // WE GOTTA TO FIX THIS BUF OF NOT UPDATING IN REALTIME || WE'VE FIXED IT NOW
+    componentDidMount() {
+        this.props.onFetchUserDetails(this.props.userId);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.userData.firstname !== this.props.userData.firstname || 
+            prevProps.userData.lastname !== this.props.userData.lastname ||
+            prevProps.userData.email !== this.props.userData.email) {
+            
+            this.props.onFetchUserDetails(this.props.userId);
+        }
+    }
+
     render() {
-        console.log(this.state.passwordForm.currentPassword)
         return (
             <div className="update-details-container">
                 
-                <Form name="email" pholder="Email address" btnName="save" submit={this.nameChangeHandler}>
-                    <Input type="email" pholder="Email address" changed={this.nameChangeInputHandler} 
-                        value={this.state.emailForm.email} name="email" />
+                <Form name="details" pholder="Email address" btnName="save" submitted={this.detailsChangeHandler}>
+                    <Input type="text" pholder="First name" changed={this.detailsChangeInputHandler} 
+                        value={this.state.detailForm.firstname} name="firstname" />
+                    
+                    <Input type="text" pholder="Last name" changed={this.detailsChangeInputHandler} 
+                        value={this.state.detailForm.lastname} name="lastname" />
+
+                    <Input type="email" pholder="Email address" changed={this.detailsChangeInputHandler} 
+                        value={this.state.detailForm.email} name="email" />
                 </Form>
 
-                <Form name="password" pholder="Current Password" btnName="save" submit={this.passwordUpdateHandler}>
+                <Form name="password" pholder="Current Password" btnName="save" submitted={this.passwordUpdateHandler}>
                     <Input type="password" pholder="Current Password" changed={this.pwdChangeInputHandler} 
                         value={this.state.passwordForm.currentPassword} name="currentPassword" />
 
@@ -70,4 +96,21 @@ export class UpdateDetails extends Component {
     }
 }
 
-export default UpdateDetails;
+const mapStateToProps = state => {
+    return {
+        userId: state.auth.userId,
+        token: state.auth.token,
+        userData: state.userDet.userDataForAll
+        // userData: state.userDet.userDataForUpdateDetail
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onUpdatePassword: (inputData, token) => dispatch(actions.updatePassword(inputData, token)),
+        onUpdateDetails: (inputData, token) => dispatch(actions.updateDetails(inputData, token)),
+        onFetchUserDetails: (userId) => dispatch(actions.fetchUserForUpdateDetails(userId))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateDetails);

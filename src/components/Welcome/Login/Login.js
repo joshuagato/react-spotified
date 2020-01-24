@@ -18,6 +18,10 @@ class Login extends Component {
         
         this.props.onAuth(email, password);
     }
+
+    switchToReset = () => {
+        this.props.history.replace('/reset-pw');
+    };
    
     render() {
         let redirect = null;
@@ -31,16 +35,18 @@ class Login extends Component {
                 { redirect }
                 <h2>Login to your account</h2>
 
-                <form ref="forms" onSubmit={this.loginHandler}>
+                <form onSubmit={this.loginHandler}>
                     <FormControls ref="eml" id="eml" name="email" title="email" plcHolder="e.g joshuagato37@gmail.com" 
-                        changed={this.changeHandler} />
+                        type="email" changed={this.changeHandler} />
                     
                     <FormControls ref="pwd" id="pwd" name="password" title="password" plcHolder="Your password" 
-                        changed={this.changeHandler} />
+                        type="password" changed={this.changeHandler} />
                     
                     <button type="submit">Login</button>
                 </form>
-                <p onClick={this.props.switchForm}>Don't have an account yet? Sign up here!!</p>
+                <p onClick={this.props.switchForm}>Don't have an account yet? Register here!!</p>
+                <br />
+                <p onClick={this.switchToReset}>Forgotten your password? Click here to reset!!</p>
             </div>
         );
     }

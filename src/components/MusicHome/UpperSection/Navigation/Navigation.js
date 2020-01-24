@@ -11,7 +11,8 @@ const Navigation = (props) => (
             <NavLink to='/music-home?search' className="search">Search <img src={SearchIcon} alt="" /></NavLink>
             <NavLink to='/music-home?browse'>Browse</NavLink>
             <NavLink to='/music-home?playlists'>Playlist</NavLink>
-            <NavLink to='/music-home?settings'>{props.name}</NavLink>
+            {/* Investigate into why loading doesnt show, but undefined rather */}
+            { !props.name ? 'loading' : <NavLink to='/music-home?settings'>{!props.name ? 'loading...' : props.name}</NavLink> }
         </div>
     </section>
 );

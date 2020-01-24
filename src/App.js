@@ -8,6 +8,7 @@ import Welcome from './components/Welcome/Welcome';
 // import NotFound from './components/NotFound/NotFound';
 import MusicHome from './components/MusicHome/MusicHome';
 import Logout from './components/Welcome/Logout/Logout';
+import ResetPw from './components/Welcome/ResetPw/ResetPw';
 import Experiment from './components/Experiment/Experiment';
 import * as actions from './store/actions/index';
 
@@ -21,8 +22,10 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route path='/' exact render={(props) => <Welcome {...props} />} />
+        <Route path='/reset-pw/' exact render={(props) => <ResetPw {...props} />} />
+        <Route path='/reset-pw/:id' exact render={(props) => <ResetPw {...props} />} />
         <Route path='/experiment' exact render={(props) => <Experiment {...props} />} />
-        <Redirect to='/' />
+        {/* <Redirect to='/' /> */}
         {/* <Route component={NotFound} /> */}
       </Switch>
     );
