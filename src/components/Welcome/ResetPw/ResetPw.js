@@ -14,6 +14,8 @@ class ResetPw extends Component {
             newPassword: '',
             confirmNewPassword: ''
         },
+        // error: '',
+        message: '',
         done: false
     };
 
@@ -56,11 +58,13 @@ class ResetPw extends Component {
 
         axios.post('http://localhost:4004/graphql', graphqlQuery)
         .then(response => {
-            console.log(response.data);
-            this.setState({ email: '' });
+            // console.log(response.data);
+            // const message = 'Reset link sent to your email. Please click on it to reset your password.';
+            this.setState({ email: '', message: response.data.errors[0].message });
         })
         .catch(error => {
-            console.log(error.response);
+            // console.log(error.response);
+            this.setState({ message: error.response.data.errors[0].message })
         });
     };
     resetPassword = event => {
@@ -77,11 +81,12 @@ class ResetPw extends Component {
         };
         axios.post('http://localhost:4004/graphql', graphqlQuery)
         .then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             this.setState({ pwdInput: { ...this.state.pwdInput, token: '', newPassword: '', confirmNewPassword: '' } })
         })
         .catch(error => {
-            console.log(error.response);
+            // console.log(error.response);
+            this.setState({ message: error.response.data.errors[0].message });
         });
     };
 
@@ -91,7 +96,7 @@ class ResetPw extends Component {
                 { this.state.done ? 
                     <EnterPassword submitted={this.resetPassword} 
                         changed={this.passwordChangeHandler} value={this.state.pwdInput} /> : 
-                    <EnterEmail submitted={this.sendResetToken} 
+                    <EnterEmail submitted={this.sendResetToken} message={this.state.message}
                         changed={this.emailInputChangedHandler} value={this.state.email} /> 
                 }
             </div>

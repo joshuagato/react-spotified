@@ -42,6 +42,7 @@ class Register extends Component {
             <div className="register">
                 <h2>Create your your account</h2>
                 <form onSubmit={this.registerHandler}>
+                    
                     <FormControls ref="fn" id="fname" name="firstname" title="First Name" 
                             plcHolder="e.g Joshua" changed={this.changeHandler} />
 

@@ -6,7 +6,7 @@ const EnterEmail = (props) => {
     return (
         <div className="enter-email">
             <h2>Enter your email here.</h2>
-
+            <p className="error-message">{props.message}</p>
             <form onSubmit={props.submitted}>
                 <FormControls id="eml" type="email" title="email" plcHolder="e.g joshuagato37@gmail.com" 
                     value={props.value} changed={props.changed} />

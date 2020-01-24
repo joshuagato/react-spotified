@@ -62,9 +62,11 @@ const authSuccess = (token, userId) => {
     };
 };
 const authFail = error => {
+    // console.log("ERROR", error.data.errors[0].message)
     return {
         type: actionTypes.AUTH_FAIL,
-        error: error
+        // error: error
+        error: error.data.errors[0].message
     };
 };
 export const auth = (email, password) => {
