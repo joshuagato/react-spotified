@@ -12,13 +12,15 @@ import * as serviceWorker from './serviceWorker';
 import authReducer from './store/reducers/auth';
 import registerReducer from './store/reducers/register';
 import userDetailsReducer from './store/reducers/fetch-user-details';
+import musicPlayerReducer from './store/reducers/music-player';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
     auth: authReducer,
     regis: registerReducer,
-    userDet: userDetailsReducer
+    userDet: userDetailsReducer,
+    musPlay: musicPlayerReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

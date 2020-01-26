@@ -10,6 +10,7 @@ import MusicHome from './components/MusicHome/MusicHome';
 import Logout from './components/Welcome/Logout/Logout';
 import ResetPw from './components/Welcome/ResetPw/ResetPw';
 import Experiment from './components/Experiment/Experiment';
+import Audio from './components/MusicHome/Audio/Audio';
 import * as actions from './store/actions/index';
 
 class App extends Component {
@@ -25,7 +26,8 @@ class App extends Component {
         <Route path='/reset-pw/' exact render={(props) => <ResetPw {...props} />} />
         <Route path='/reset-pw/:id' exact render={(props) => <ResetPw {...props} />} />
         <Route path='/experiment' exact render={(props) => <Experiment {...props} />} />
-        {/* <Redirect to='/' /> */}
+        <Route path='/audio' component={Audio} />
+        <Redirect to='/' />
         {/* <Route component={NotFound} /> */}
       </Switch>
     );
@@ -34,7 +36,8 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path='/music-home' render={(props) => <MusicHome {...props} />} />
-          <Logout path='/logout' component={Logout} />
+          <Route path='/logout' component={Logout} />
+          <Route path='/audio' component={Audio} />
           <Redirect to='/music-home' />
           {/* <Route component={NotFound} /> */}
         </Switch>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './MusicHome.scss';
 import { connect } from 'react-redux';
+// import axios from 'axios';
 
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,10 +14,19 @@ import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import LowerSection from './LowerSection/LowerSection';
 import UpperSection from './UpperSection/UpperSection';
 import * as actions from '../../store/actions/index';
-
-import StoneBwoy from '../../assets/artwork/stonebwoy.jpg';
+import Audio from './Audio/Audio';
 
 class MusicHome extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.audioInstance = React.createRef();
+
+        this.state = {
+            playing: false
+        }
+    }
 
     componentDidMount() {
         if(this.props.location.search === '') this.props.history.push('/music-home?browse');
@@ -29,8 +39,8 @@ class MusicHome extends Component {
         if(prevProps.userData.firstname !== this.props.userData.firstname || 
             prevProps.userData.lastname !== this.props.userData.lastname) {
                 
-            this.props.onFetchUser(this.props.userId);
-        }
+                this.props.onFetchUser(this.props.userId);
+            }
     }
 
     render() {
@@ -39,6 +49,8 @@ class MusicHome extends Component {
 
         return (
             <div className="music-home">
+                <Audio ref={this.audioInstance} />
+
                 <div className="fixed-bar">
                     <section className="mobile-nav">
                         <NavLink to='/music-home?albums'><FontAwesomeIcon icon={faHome} /></NavLink>
@@ -54,7 +66,8 @@ class MusicHome extends Component {
 
 
                 {/* Lower Section */}
-                <LowerSection albumArt={StoneBwoy} title="Tomorrow" artist="StoneBwoy" current={2.56} remaining={5.32} />
+                <LowerSection albumArt={'http://localhost:4004/artwork/stonebwoy.jpg'} title="Tomorrow" artist="StoneBwoy" 
+                    current={2.56} remaining={5.32} playing={this.state.playing} />
 
             </div>
         );
@@ -75,4 +88,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MusicHome);
+export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(MusicHome);

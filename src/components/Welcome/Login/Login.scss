@@ -1,5 +1,5 @@
 .login {
-    width: 24rem;
+    min-width: 29%;
     color: #fff;
 
     @media(max-width: 575px) and (orientation: portrait) {
@@ -45,13 +45,17 @@
 
         button[type="button"] {
             position: absolute;
-            top: 19rem;
-            right: 16.5rem;
+            top: 48%;
+            right: 36%;
             cursor: pointer;
             background: none;
             border: none;
-            color: #03af4e;
+            color: #fff;
             outline: none;
+
+            @media(max-width: 575px) and (orientation: portrait) {
+                right: 7%;
+            }
         }
 
         button[type="submit"] {

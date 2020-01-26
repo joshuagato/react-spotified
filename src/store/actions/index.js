@@ -6,3 +6,5 @@ export { registerUser } from './register';
 export { updateDetails, updatePassword } from './update-details';
 
 export { fetchUserForMusicHome, fetchUserForUpdateDetails } from './fetch-user-details';
+
+export { trackPlaying, trackPaused } from './music-player';

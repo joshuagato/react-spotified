@@ -14,7 +14,7 @@ export class Songs extends Component {
         numofsongs: ''
     }
 
-    componentDidMount() {
+    UNSAFE_componentWillMount() {
         const albumId = new URLSearchParams(window.location.search).get('alid');
         const artistId = new URLSearchParams(window.location.search).get('arid');
 
@@ -86,7 +86,7 @@ export class Songs extends Component {
         .catch(error => console.log(error));
     }
 
-    songs = (num) => {
+    songs = num => {
         if(num === 0 || num >= 2) {
             return "Songs";
         }
@@ -100,7 +100,8 @@ export class Songs extends Component {
             <div className="songs-container">
                 <section className="song-details-section">
                     <div className="albumArt-section">
-                        {this.state.artwork !== '' ? <img src={require( "../../../../assets/artwork/" + this.state.artwork )} alt="" /> : ''}
+                        {/* {this.state.artwork !== '' ? <img src={require( "../../../../assets/artwork/" + this.state.artwork )} alt="" /> : ''} */}
+                        {this.state.artwork !== '' ? <img src={ "http://localhost:4004/artwork/" + this.state.artwork} alt="" /> : ''}
                     </div>
                     <div className="details-section">
                         <h1>{this.state.albumTitle}</h1>

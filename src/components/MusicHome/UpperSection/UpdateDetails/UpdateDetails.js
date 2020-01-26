@@ -24,14 +24,14 @@ export class UpdateDetails extends Component {
         }
     }
 
-    detailsChangeInputHandler = (event) => {
+    detailsChangeInputHandler = event => {
         
         const updatedState = { ...this.state.detailForm };
         updatedState[event.target.name] = event.target.value
         
         this.setState({ detailForm: updatedState });
     };
-    pwdChangeInputHandler = (event) => {
+    pwdChangeInputHandler = event => {
 
         const updatedState = { ...this.state.passwordForm };
         updatedState[event.target.name] = event.target.value;
@@ -40,12 +40,12 @@ export class UpdateDetails extends Component {
     };
     
 
-    detailsChangeHandler = (event) => {
+    detailsChangeHandler = event => {
         event.preventDefault();
 
         this.props.onUpdateDetails(this.state.detailForm, this.props.token);
     }
-    passwordUpdateHandler = (event) => {
+    passwordUpdateHandler = event => {
         event.preventDefault();
         
         this.props.onUpdatePassword(this.state.passwordForm, this.props.token);

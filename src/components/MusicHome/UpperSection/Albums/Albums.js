@@ -14,8 +14,7 @@ class Albums extends Component {
         albums: []
     }
 
-    UNSAFE_componentWillMount() {
-
+    componentDidMount() {
         const graphqlQuery = {
             query: `
                 {
