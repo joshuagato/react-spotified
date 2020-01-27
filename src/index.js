@@ -13,6 +13,7 @@ import authReducer from './store/reducers/auth';
 import registerReducer from './store/reducers/register';
 import userDetailsReducer from './store/reducers/fetch-user-details';
 import musicPlayerReducer from './store/reducers/music-player';
+import songsReducer from './store/reducers/songs';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     auth: authReducer,
     regis: registerReducer,
     userDet: userDetailsReducer,
-    musPlay: musicPlayerReducer
+    musPlay: musicPlayerReducer,
+    songs: songsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

@@ -8,7 +8,7 @@ const Song = (props) => (
     <div className="single-song">
         <div className="left-section">
             <span className="number">{props.number}</span>
-            <span className="play-button"><img src={Play} alt="" /></span>
+            <span className="play-button" onClick={props.clicked.bind(this, props.id)}><img src={Play} alt="" /></span>
         </div>
         <div className="middle-section">
             <p className="title">{props.title}</p>

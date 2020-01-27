@@ -55,7 +55,7 @@ class Albums extends Component {
                     {
                         this.state.albums.map(album => (
                             <Album key={album.id} albumId={album.id} artistId={album.artist} pic={album.artworkPath} 
-                                name={album.title} click={this.openSongs} />
+                                name={album.title} clicked={this.openSongs} />
                         ))
                     }
                 </div>

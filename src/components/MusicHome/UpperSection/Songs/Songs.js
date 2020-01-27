@@ -1,89 +1,33 @@
 import React, { Component } from 'react';
 import './Songs.scss';
-import Song from './Song/Song';
+import { connect } from 'react-redux';
 
-import axios from 'axios';
+import Song from './Song/Song';
+import Audio from '../../Audio/Audio';
+import * as actions from '../../../../store/actions/index'
+
 
 export class Songs extends Component {
 
-    state = {
-        songs: [],
-        albumTitle: '',
-        artistName: '',
-        artwork: '',
-        numofsongs: ''
+    constructor(props) {
+        super(props);
+
+        this.audioInstance = React.createRef();
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         const albumId = new URLSearchParams(window.location.search).get('alid');
         const artistId = new URLSearchParams(window.location.search).get('arid');
 
-        const albumSongsQuery = {
-            query: `
-                query FetchAlbumSong($id: Int!) {
-                    albumSongs(albumId: $id) {
-                        id title duration path
-                    }
-                }
-            `,
-            variables: { id: +albumId }
-        };
-        axios.post('http://localhost:4004/graphql', albumSongsQuery).then(response => {
-            const result = response.data.data.albumSongs;
-            
-            this.setState({ songs: result });
-        })
-        .catch(error => console.log(error));
+        this.props.onFetchAllSongDetails(albumId, artistId);
+    }
 
+    componentDidUpdate(prevProps, _) {
+        if(prevProps.currentlyPlaying.id !== this.props.currentlyPlaying.id && prevProps.songs !== this.props.songs) {
 
-        const albumQuery = {
-            query: `
-                query FetchAlbum($id: Int!) {
-                    album(albumId: $id) {
-                        title artist artworkPath
-                    }
-                }
-            `,
-            variables: { id: +albumId }
-        };
-        axios.post('http://localhost:4004/graphql', albumQuery).then(response => {
-            const result = response.data.data.album;
-            
-            this.setState({ artwork: result.artworkPath, albumTitle: result.title, artistId: result.artist });
-        })
-        .catch(error => console.log(error));
-        
-        
-        const numOfSongsQuery = {
-            query: `
-                query NumOfSongs($id: Int!) {
-                    numOfSongs(albumId: $id)
-                }
-            `,
-            variables: { id: +albumId }
-        };
-        axios.post('http://localhost:4004/graphql', numOfSongsQuery).then(response => {
-            
-            this.setState({ numofsongs: response.data.data.numOfSongs });
-        })
-        .catch(error => console.log(error));
-
-
-        const artistQuery = {
-            query: `
-                query FetchArtist($id: Int!) {
-                    artist(artistId: $id) {
-                        id name
-                    }
-                }
-            `,
-            variables: { id: +artistId }
-        };
-        axios.post('http://localhost:4004/graphql', artistQuery).then(response => {
-            const result = response.data.data.artist;
-            this.setState({ artistName: result.name });
-        })
-        .catch(error => console.log(error));
+            const newPlaylist = this.props.songs;
+            this.audioInstance.current.setTrack(newPlaylist[0], newPlaylist, false);
+        }
     }
 
     songs = num => {
@@ -95,27 +39,34 @@ export class Songs extends Component {
         }
     }
 
+    playClicked = id => {
+        console.log("CLICKED THE PLAY BUTTON WITH ID: ", id);
+    }
+
     render() {
         return (
             <div className="songs-container">
+                <Audio ref={this.audioInstance} />
+
                 <section className="song-details-section">
                     <div className="albumArt-section">
-                        {/* {this.state.artwork !== '' ? <img src={require( "../../../../assets/artwork/" + this.state.artwork )} alt="" /> : ''} */}
-                        {this.state.artwork !== '' ? <img src={ "http://localhost:4004/artwork/" + this.state.artwork} alt="" /> : ''}
+                        {/* {this.props.albumArtwork !== '' ? <img src={require( "../../../../assets/artwork/" + this.props.albumArtwork )} alt="" /> : ''} */}
+                        {this.props.albumArtwork !== '' ? <img src={ "http://localhost:4004/artwork/" + this.props.albumArtwork} alt="" /> : ''}
                     </div>
                     <div className="details-section">
-                        <h1>{this.state.albumTitle}</h1>
-                        <p>By {this.state.artistName}</p>
-                        <p>{this.state.numofsongs} {this.songs(this.state.numofsongs)}</p>
+                        <h1>{this.props.albumTitle}</h1>
+                        <p>By {this.props.artistName}</p>
+                        <p>{this.props.numofsongs} {this.songs(this.props.numofsongs)}</p>
                     </div>
                 </section>
 
                 <section className="songs-section">
                     {
-                        this.state.songs.map((song, index) => {
+                        this.props.songs.map((song, index) => {
 
                             return(
-                                <Song key={song.id} number={index+1} title={song.title} artist={this.state.artistName} duration={song.duration} />
+                                <Song key={song.id} id={song.id} number={index+1} title={song.title} artist={this.props.artistName} 
+                                duration={song.duration} clicked={this.playClicked} />
                             )
                         })
                     }
@@ -126,4 +77,21 @@ export class Songs extends Component {
     }
 }
 
-export default Songs;
+const mapStateToProps = state => {
+    return {
+        songs: state.songs.songs,
+        albumTitle: state.songs.albumTitle,
+        albumArtwork: state.songs.albumArtwork,
+        numofsongs: state.songs.numofsongs,
+        artistName: state.songs.artistName,
+        currentlyPlaying: state.musPlay.currentlyPlaying
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchAllSongDetails: (albumId, artistId) => dispatch(actions.fetchAllSongDetails(albumId, artistId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Songs);

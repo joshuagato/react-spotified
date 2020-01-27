@@ -9,7 +9,7 @@ import UpdateDetails from './UpdateDetails/UpdateDetails';
 import Playlists from './Playlists/Playlists';
 import Songs from './Songs/Songs';
 
-const UpperSection = (props) => (
+const UpperSection = props => (
     <div className="upper-div">
         
         <Navigation name={props.name} />

@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import './LowerSection.scss';
 import { connect } from 'react-redux';
-import axios from 'axios';
+// import axios from 'axios';
 // import { findDOMNode } from 'react-dom';
 
 import VolumeIcon from '../../../assets/icons/volume.png';
-import shuffle from '../../../assets/icons/shuffle.png';
+import shuffleInactive from '../../../assets/icons/shuffle.png';
+import shuffleActive from '../../../assets/icons/shuffle-active.png';
 import previous from '../../../assets/icons/previous.png';
 import play from '../../../assets/icons/play.png';
 import pause from '../../../assets/icons/pause.png';
 import next from '../../../assets/icons/next.png';
-import repeat from '../../../assets/icons/repeat.png';
+import repeatInactive from '../../../assets/icons/repeat.png';
+import repeatActive from '../../../assets/icons/repeat-active.png';
 
 import ControlButtons from './ControlButtons/ControlButtons';
 import Audio from '../Audio/Audio';
-// import * as actions from '../../../store/actions/index';
+import * as actions from '../../../store/actions/index';
 
 class LowerSection extends Component {
 
@@ -22,11 +24,20 @@ class LowerSection extends Component {
         super(props);
 
         this.audioInstance = React.createRef();
+    }
 
-        this.state = {
-            songs: []
+    componentDidMount() {
+        this.props.onSetInitialPlaylistToAllSongs();
+    }
+
+    componentDidUpdate(prevProps, _) {
+        if(prevProps.songs !== this.props.songs) {
+            const newPlaylist = this.props.songs;
+            
+            this.audioInstance.current.setTrack(newPlaylist[0], newPlaylist, false);
         }
     }
+
 
     playSong = () => {
         this.audioInstance.current.play();
@@ -44,14 +55,14 @@ class LowerSection extends Component {
         else {
             window.$currentIndex -= 1;
 
-            const trackToPlay = window.$shuffle ? window.$shufflePlaylist[window.$currentIndex] : window.$currentPlaylist[window.$currentIndex];
+            const trackToPlay = this.props.shuffle ? window.$shufflePlaylist[window.$currentIndex] : window.$currentPlaylist[window.$currentIndex];
             this.audioInstance.current.setTrack(trackToPlay, window.$currentPlaylist, true);
         }
     }
     
 
     nextSong = () => {
-        if(window.$repeat) {
+        if(this.props.repeat) {
             this.audioInstance.current.setTime(0);
             this.playSong();
             return;
@@ -64,34 +75,16 @@ class LowerSection extends Component {
             window.$currentIndex += 1;
         }
 
-        const trackToPlay = window.$shuffle ? window.$shufflePlaylist[window.$currentIndex] : window.$currentPlaylist[window.$currentIndex];
+        const trackToPlay = this.props.shuffle ? window.$shufflePlaylist[window.$currentIndex] : window.$currentPlaylist[window.$currentIndex];
         this.audioInstance.current.setTrack(trackToPlay, window.$currentPlaylist, true);
-    };
-
-    componentDidMount() {
-        const graphqlQuery = {
-            query: `
-                {
-                    allSongs {
-                        id title path
-                    }
-                }
-            `
-        };
-        axios.post('http://localhost:4004/graphql', graphqlQuery).then(response => {
-            this.setState({ songs: response.data.data.allSongs });
-        })
-        .catch(error => console.log(error));
     }
 
-    componentDidUpdate(_, prevState) {
+    setRepeat = () => {
+        this.props.onRepeatPressed();
+    }
 
-        if(prevState.songs !== this.state.songs) {
-            const newPlaylist = this.state.songs;
-            
-            // this.audioInstance.current.setAudioToPlay(newPlaylist[0]);
-            this.audioInstance.current.setTrack(newPlaylist[0], newPlaylist, false);
-        }
+    setShuffle = () => {
+        this.props.onShufflePressed();
     }
 
     render() {
@@ -104,11 +97,11 @@ class LowerSection extends Component {
 
                     <div className="left">
                         <section className="album-art">
-                            <img src={this.props.albumArt} alt="img" />
+                            {this.props.currentlyPlaying.artworkPath ? <img src={'http://localhost:4004/artwork/' + this.props.currentlyPlaying.artworkPath} alt="img" /> : 'loading...1'}
                         </section>
                         <section className="track-details">
-                            <span className="title">{this.props.title}</span>
-                            <span className="artist">{this.props.artist}</span>
+                            {this.props.currentlyPlaying.title ? <span className="title">{this.props.currentlyPlaying.title}</span> : 'loading...'}
+                            {this.props.currentlyPlaying.artistName ? <span className="artist">{this.props.currentlyPlaying.artistName}</span> : 'loading...3'}
                         </section>
                     </div>
 
@@ -116,7 +109,8 @@ class LowerSection extends Component {
                         <section className="controls">
                             <div>
                                 <ControlButtons class="control-button shuffle" title="Shuffle Button"
-                                    src={shuffle}  alt="shuffle" />
+                                    src={this.props.shuffle ? shuffleActive : shuffleInactive}  alt="shuffle"
+                                        clicked={this.setShuffle} />
 
                                 <ControlButtons class="control-button previous" title="Previous Button"
                                     src={previous}  alt="previous" clicked={this.prevSong} />
@@ -131,7 +125,8 @@ class LowerSection extends Component {
                                     src={next}  alt="next" clicked={this.nextSong} />
 
                                 <ControlButtons class="control-button repeat" title="Repeat Button"
-                                    src={repeat}  alt="repeat" />
+                                    src={this.props.repeat ? repeatActive : repeatInactive}  alt="repeat" 
+                                        clicked={this.setRepeat} />
                             </div>
                         </section>
                         <section className="progress">
@@ -161,16 +156,20 @@ class LowerSection extends Component {
 
 const mapStateToProps = state => {
     return {
-        playing: state.musPlay.playing
+        songs: state.songs.songs,
+        playing: state.musPlay.playing,
+        shuffle: state.musPlay.shuffle,
+        repeat: state.musPlay.repeat,
+        currentlyPlaying: state.musPlay.currentlyPlaying
     };
 }
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onPlay: () => dispatch(actions.trackPlaying()),
-//         onPause: () => dispatch(actions.trackPaused())
-//     };
-// }
+const mapDispatchToProps = dispatch => {
+    return {
+        onShufflePressed: () => dispatch(actions.shufflePressed()),
+        onRepeatPressed: () => dispatch(actions.repeatPressed()),
+        onSetInitialPlaylistToAllSongs: () => dispatch(actions.setInitialPlaylistToAllSongs())
+    };
+}
 
-export default connect(mapStateToProps, null, null, {forwardRef: true})(LowerSection);
-// export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(LowerSection);
+export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(LowerSection);

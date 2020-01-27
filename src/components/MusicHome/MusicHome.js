@@ -22,10 +22,6 @@ class MusicHome extends Component {
         super(props);
 
         this.audioInstance = React.createRef();
-
-        this.state = {
-            playing: false
-        }
     }
 
     componentDidMount() {
@@ -66,8 +62,8 @@ class MusicHome extends Component {
 
 
                 {/* Lower Section */}
-                <LowerSection albumArt={'http://localhost:4004/artwork/stonebwoy.jpg'} title="Tomorrow" artist="StoneBwoy" 
-                    current={2.56} remaining={5.32} playing={this.state.playing} />
+                <LowerSection artist="StoneBwoy" 
+                    current={2.56} remaining={5.32}  />
 
             </div>
         );
@@ -84,7 +80,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchUser: (userId) => dispatch(actions.fetchUserForMusicHome(userId)),
+        onFetchUser: userId => dispatch(actions.fetchUserForMusicHome(userId)),
     };
 };
 

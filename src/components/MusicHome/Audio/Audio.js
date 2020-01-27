@@ -3,7 +3,6 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as actions from '../../../store/actions/index';
-// import LowerSection from '../LowerSection/LowerSection';
 
 class Audio extends Component {
     constructor(props) {
@@ -13,14 +12,14 @@ class Audio extends Component {
         window.$shufflePlaylist = [];
         window.$tempPlaylist = [];
         window.$currentIndex = 0;
-        window.$shuffle = false;
-        window.$repeat = false;
+        // window.$shuffle = false;
+        // window.$repeat = false;
 
-        this.currentlyPlaying = {};
+        // this.currentlyPlaying = {};
         this.audio = document.createElement('audio');
 
         this.setAudioToPlay = track => {
-            this.currentlyPlaying = track;
+            this.props.onSetCurentlyPlaying(track);
             this.audio.src = 'http://localhost:4004/music/' + track.path;
         };
 
@@ -32,7 +31,7 @@ class Audio extends Component {
                 this.shuffleArray(window.$shufflePlaylist);
             }
     
-            if(window.$shuffle === true) {
+            if(this.props.shuffle === true) {
                 window.$currentIndex = window.$shufflePlaylist.indexOf(track);
             }
             else {
@@ -78,11 +77,18 @@ class Audio extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        shuffle: state.musPlay.shuffle
+    };
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         onPlay: () => dispatch(actions.trackPlaying()),
-        onPause: () => dispatch(actions.trackPaused())
+        onPause: () => dispatch(actions.trackPaused()),
+        onSetCurentlyPlaying: track => dispatch(actions.setCurentlyPlaying(track))
     };
 };
 
-export default connect(null, mapDispatchToProps, null, {forwardRef: true})(Audio);
+export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(Audio);

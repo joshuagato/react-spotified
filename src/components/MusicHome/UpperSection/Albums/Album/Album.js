@@ -7,7 +7,7 @@ import './Album.scss';
 
 const Album = props => {
     return(
-    <div className="album-container" onClick={() => props.click(props.albumId, props.artistId)}>
+    <div className="album-container" onClick={() => props.clicked(props.albumId, props.artistId)}>
         <div className="album-pic">
             
             <img className="playlist-img" src={"http://localhost:4004/artwork/" + props.pic} alt="" />
