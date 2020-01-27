@@ -24,7 +24,7 @@ export class Songs extends Component {
 
     componentDidUpdate(prevProps, _) {
         if(prevProps.currentlyPlaying.id !== this.props.currentlyPlaying.id && prevProps.songs !== this.props.songs) {
-
+            this.setState({ playlist: this.props.songs });
             const newPlaylist = this.props.songs;
             this.audioInstance.current.setTrack(newPlaylist[0], newPlaylist, false);
         }
@@ -40,7 +40,17 @@ export class Songs extends Component {
     }
 
     playClicked = id => {
-        console.log("CLICKED THE PLAY BUTTON WITH ID: ", id);
+        const songIndex = this.props.songs.findIndex(song => song.id === id);
+        const newPlaylist = this.props.songs;
+        
+        this.audioInstance.current.setAudioToPlay(newPlaylist[songIndex]);
+        // this.audioInstance.current.setTrack(newPlaylist[songIndex], newPlaylist, true);
+        this.audioInstance.current.play();
+
+        // this code also works
+        // const song = this.props.songs.filter(song => song.id === id);
+        // this.audioInstance.current.setAudioToPlay(song[0]);
+        // this.audioInstance.current.play();
     }
 
     render() {

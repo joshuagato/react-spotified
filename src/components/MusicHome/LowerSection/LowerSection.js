@@ -4,15 +4,16 @@ import { connect } from 'react-redux';
 // import axios from 'axios';
 // import { findDOMNode } from 'react-dom';
 
-import VolumeIcon from '../../../assets/icons/volume.png';
 import shuffleInactive from '../../../assets/icons/shuffle.png';
 import shuffleActive from '../../../assets/icons/shuffle-active.png';
+import repeatInactive from '../../../assets/icons/repeat.png';
+import repeatActive from '../../../assets/icons/repeat-active.png';
+import volumeInactive from '../../../assets/icons/volume-mute.png';
+import volumeActive from '../../../assets/icons/volume.png';
 import previous from '../../../assets/icons/previous.png';
 import play from '../../../assets/icons/play.png';
 import pause from '../../../assets/icons/pause.png';
 import next from '../../../assets/icons/next.png';
-import repeatInactive from '../../../assets/icons/repeat.png';
-import repeatActive from '../../../assets/icons/repeat-active.png';
 
 import ControlButtons from './ControlButtons/ControlButtons';
 import Audio from '../Audio/Audio';
@@ -42,7 +43,6 @@ class LowerSection extends Component {
     playSong = () => {
         this.audioInstance.current.play();
     }
-
     pauseSong = () => {
         this.audioInstance.current.pause();
     }
@@ -59,8 +59,6 @@ class LowerSection extends Component {
             this.audioInstance.current.setTrack(trackToPlay, window.$currentPlaylist, true);
         }
     }
-    
-
     nextSong = () => {
         if(this.props.repeat) {
             this.audioInstance.current.setTime(0);
@@ -82,12 +80,15 @@ class LowerSection extends Component {
     setRepeat = () => {
         this.props.onRepeatPressed();
     }
-
     setShuffle = () => {
         this.props.onShufflePressed();
     }
+    setMute = () => {
+        this.props.onMutePressed();
+    }
 
     render() {
+        // console.log(this.props.)
         return(
             <div className="lower-div">
                 {/* <Audio ref="audio" /> */}
@@ -140,8 +141,8 @@ class LowerSection extends Component {
 
                     <div className="right">
                         <section>
-                            <button title="Mute Button">
-                                <img src={VolumeIcon} alt="vol" />
+                            <button title="Mute Button" onClick={this.setMute}>
+                                <img src={this.props.mute ? volumeInactive : volumeActive} alt="vol" />
                             </button>
                             <div className="volume-bar-container">
                                 <div className="volume-bar"></div>
@@ -160,6 +161,7 @@ const mapStateToProps = state => {
         playing: state.musPlay.playing,
         shuffle: state.musPlay.shuffle,
         repeat: state.musPlay.repeat,
+        mute: state.musPlay.mute,
         currentlyPlaying: state.musPlay.currentlyPlaying
     };
 }
@@ -168,6 +170,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onShufflePressed: () => dispatch(actions.shufflePressed()),
         onRepeatPressed: () => dispatch(actions.repeatPressed()),
+        onMutePressed: () => dispatch(actions.mutePressed()),
         onSetInitialPlaylistToAllSongs: () => dispatch(actions.setInitialPlaylistToAllSongs())
     };
 }

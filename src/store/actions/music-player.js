@@ -83,3 +83,8 @@ export const shufflePressed = () => {
         type: actionTypes.SHUFFLE_BUTTON_PRESSED
     };
 }
+export const mutePressed = () => {
+    return {
+        type: actionTypes.MUTE_BUTTON_PRESSED
+    };
+}

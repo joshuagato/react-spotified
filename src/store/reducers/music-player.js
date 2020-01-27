@@ -4,6 +4,7 @@ const initialState = {
     playing: false,
     shuffle: false,
     repeat: false,
+    mute: false,
     currentlyPlaying: {}
 }
 
@@ -20,6 +21,9 @@ const reducer = (state = initialState, action) => {
 
         case actionTypes.SHUFFLE_BUTTON_PRESSED:
             return { ...state, shuffle: !state.shuffle };
+
+        case actionTypes.MUTE_BUTTON_PRESSED:
+            return { ...state, mute: !state.mute };
 
         case actionTypes.SET_CURRENTLY_PLAYING:
             return { ...state, currentlyPlaying: action.currentTrack };
