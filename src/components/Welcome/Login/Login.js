@@ -67,9 +67,9 @@ class Login extends Component {
                     
                     <button type="submit">Login</button>
                 </form>
-                <p onClick={this.props.switchForm}>Don't have an account yet? Register here.</p>
+                <p onClick={this.props.switchForm}>Don't have an account yet? Register here!</p>
                 <br />
-                <p onClick={this.switchToReset} className="passwd-reset">Forgotten your password? Click here to reset!!</p>
+                <p onClick={this.switchToReset} className="passwd-reset">Forgotten your password?? Click here to reset!!!</p>
             </div>
         );
     }
