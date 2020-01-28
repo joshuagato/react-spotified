@@ -29,6 +29,14 @@ class MusicHome extends Component {
         
         // Fetching the logged in user's details
        this.props.onFetchUser(this.props.userId);
+
+       // I NEEED TO FIX A BUG HERE, THESE PROPERTIES MUST BE SET ON THE UPPERSECTION or LINKS RATHER
+       // Prevent the links from getting highlighted when dragged
+        const musicHomeContainer = this.refs.musicHome;
+        // musicHomeContainer.addEventListener('mousedown', this.preventBehaviour);
+		// musicHomeContainer.addEventListener('touchstart', this.preventBehaviour);
+		musicHomeContainer.addEventListener('mousemove', this.preventBehaviour);
+		musicHomeContainer.addEventListener('touchmove', this.preventBehaviour);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -39,12 +47,17 @@ class MusicHome extends Component {
             }
     }
 
+    // Prevent default behaviour of mousedown, mousemove, etc in music-player div
+    preventBehaviour = event => {
+        event.preventDefault();
+    }
+
     render() {
         // I NEEED TO FIX A BUG HERE || I'VE FIXED IT
         let param = this.props.location.search;
 
         return (
-            <div className="music-home">
+            <div className="music-home" ref="musicHome">
                 <Audio ref={this.audioInstance} />
 
                 <div className="fixed-bar">
@@ -58,12 +71,11 @@ class MusicHome extends Component {
                 </div>
 
                 {/* Upper Section */}
-                <UpperSection urlParam={param} name={this.props.userData.firstname + ' ' + this.props.userData.lastname} />
+                <UpperSection urlParam={param} name={this.props.userData} />
 
 
                 {/* Lower Section */}
-                <LowerSection artist="StoneBwoy" 
-                    current={2.56} remaining={5.32}  />
+                <LowerSection artist="StoneBwoy" />
 
             </div>
         );

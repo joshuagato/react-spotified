@@ -42,7 +42,8 @@ export class Songs extends Component {
     playClicked = id => {
         const songIndex = this.props.songs.findIndex(song => song.id === id);
         const newPlaylist = this.props.songs;
-        
+
+        // this.audioInstance.current.pause();
         this.audioInstance.current.setAudioToPlay(newPlaylist[songIndex]);
         // this.audioInstance.current.setTrack(newPlaylist[songIndex], newPlaylist, true);
         this.audioInstance.current.play();

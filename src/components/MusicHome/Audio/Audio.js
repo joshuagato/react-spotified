@@ -12,32 +12,36 @@ class Audio extends Component {
         window.$shufflePlaylist = [];
         window.$tempPlaylist = [];
         window.$currentIndex = 0;
+        window.$audio = document.createElement('audio');
         // window.$shuffle = false;
         // window.$repeat = false;
 
         // this.currentlyPlaying = {};
-        this.audio = document.createElement('audio');
+
+        // this.audio = document.createElement('audio');
 
         this.setAudioToPlay = track => {
             this.props.onSetCurentlyPlaying(track);
-            this.audio.src = 'http://localhost:4004/music/' + track.path;
+            // this.audio.src = 'http://localhost:4004/music/' + track.path;
+            window.$audio.src = 'http://localhost:4004/music/' + track.path;
         };
+
 
         this.setTrack = (track, newPlaylist, play) => {
             if(newPlaylist !== window.$currentPlaylist) {
-    
+
                 window.$currentPlaylist = newPlaylist;
                 window.$shufflePlaylist =  window.$currentPlaylist.slice();
                 this.shuffleArray(window.$shufflePlaylist);
             }
-    
+
             if(this.props.shuffle === true) {
                 window.$currentIndex = window.$shufflePlaylist.indexOf(track);
             }
             else {
                 window.$currentIndex = window.$currentPlaylist.indexOf(track);
             }
-    
+
             this.pause();
 
             this.setAudioToPlay(track);
@@ -47,18 +51,59 @@ class Audio extends Component {
             }
         };
 
+        
+        window.$audio.addEventListener('ended', () => {
+            this.playNextSong();
+        });
+
+
         this.play = () => {
             this.props.onPlay();
-            this.audio.play();
+            window.$audio.play();
         };
-
         this.pause = () => {
             this.props.onPause();
-            this.audio.pause();
+            window.$audio.pause();
         };
 
+
+        this.playPreviousSong = () => {
+            if(window.$audio.currentTime >= 3 || window.$currentIndex === 0) {
+                this.setTime(0);
+            }
+            else {
+                window.$currentIndex -= 1;
+    
+                const trackToPlay = this.props.shuffle ? window.$shufflePlaylist[window.$currentIndex] : window.$currentPlaylist[window.$currentIndex];
+                this.setTrack(trackToPlay, window.$currentPlaylist, true);
+            }
+        }
+
+        
+        this.playNextSong = () => {
+            if(this.props.repeat) {
+                this.setTime(0);
+                this.play();
+                return;
+            }
+    
+            if(window.$currentIndex === window.$currentPlaylist.length - 1) {
+                window.$currentIndex = 0;
+            }
+            else {
+                window.$currentIndex += 1;
+            }
+    
+            const trackToPlay = this.props.shuffle ? window.$shufflePlaylist[window.$currentIndex] : window.$currentPlaylist[window.$currentIndex];
+            this.setTrack(trackToPlay, window.$currentPlaylist, true);
+        }
+
+        this.setMute = () => {
+            window.$audio.muted = !window.$audio.muted;
+        }
+
         this.setTime = seconds => {
-            this.audio.currentTime = seconds;
+            window.$audio.currentTime = seconds;
         };
         
         this.shuffleArray = a => {
@@ -70,6 +115,16 @@ class Audio extends Component {
                 a[j] = x;
             }
         };
+
+        this.formatTime = seconds => {
+            let time = Math.round(seconds);
+            let minutes = Math.floor(time / 60);
+            seconds = time - (minutes * 60);
+
+            let extraZero = (seconds < 10) ? "0" : "";
+
+            return minutes + ":" + extraZero + seconds;
+        }
     }
 
     render() {
@@ -79,7 +134,8 @@ class Audio extends Component {
 
 const mapStateToProps = state => {
     return {
-        shuffle: state.musPlay.shuffle
+        shuffle: state.musPlay.shuffle,
+        repeat: state.musPlay.repeat
     };
 }
 
