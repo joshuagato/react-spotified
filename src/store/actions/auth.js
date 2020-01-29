@@ -84,7 +84,7 @@ export const auth = (email, password) => {
             variables: { email: email, password: password }
         };
       
-        axios.post('http://localhost:4004/graphql', graphqlQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery).then(response => {
 
             localStorage.setItem('token', response.data.data.login.token);
             localStorage.setItem('userId', response.data.data.login.userId);

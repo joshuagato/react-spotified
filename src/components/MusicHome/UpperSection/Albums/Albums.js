@@ -24,7 +24,7 @@ class Albums extends Component {
                 }
             `
         };
-        axios.post('http://localhost:4004/graphql', graphqlQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery).then(response => {
             this.setState({ albums: response.data.data.albums });
         })
         .catch(error => console.log(error));

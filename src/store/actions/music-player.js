@@ -16,7 +16,7 @@ export const setCurentlyPlaying = track => {
             `,
             variables: { id: +track.album }
         };
-        axios.post('http://localhost:4004/graphql', albumQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, albumQuery).then(response => {
             const result = response.data.data.album;
             dispatch(getAndPushArtworkPath(result.artworkPath));
         })
@@ -34,7 +34,7 @@ export const setCurentlyPlaying = track => {
             `,
             variables: { id: +track.artist }
         };
-        axios.post('http://localhost:4004/graphql', artistQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, artistQuery).then(response => {
             const result = response.data.data.artist;
             dispatch(getAndPushArtistName(result.name));
         })

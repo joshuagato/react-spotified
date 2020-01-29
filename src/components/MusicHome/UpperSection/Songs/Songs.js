@@ -62,7 +62,7 @@ export class Songs extends Component {
                 <section className="song-details-section">
                     <div className="albumArt-section">
                         {/* {this.props.albumArtwork !== '' ? <img src={require( "../../../../assets/artwork/" + this.props.albumArtwork )} alt="" /> : ''} */}
-                        {this.props.albumArtwork !== '' ? <img src={ "http://localhost:4004/artwork/" + this.props.albumArtwork} alt="" /> : ''}
+                        {this.props.albumArtwork !== '' ? <img src={ process.env.REACT_APP_SERVER_ARTWORK_URL + this.props.albumArtwork} alt="" /> : ''}
                     </div>
                     <div className="details-section">
                         <h1>{this.props.albumTitle}</h1>

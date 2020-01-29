@@ -56,7 +56,7 @@ class ResetPw extends Component {
             variables: { email: email }
         };
 
-        axios.post('http://localhost:4004/graphql', graphqlQuery)
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery)
         .then(response => {
             // console.log(response.data);
             // const message = 'Reset link sent to your email. Please click on it to reset your password.';
@@ -79,7 +79,7 @@ class ResetPw extends Component {
             `,
             variables: { token: state.token, newPassword: state.newPassword, confirmPassword: state.confirmNewPassword }
         };
-        axios.post('http://localhost:4004/graphql', graphqlQuery)
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery)
         .then(response => {
             // console.log(response.data);
             this.setState({ pwdInput: { ...this.state.pwdInput, token: '', newPassword: '', confirmNewPassword: '' } })

@@ -23,7 +23,7 @@ class Audio extends Component {
         this.setAudioToPlay = track => {
             this.props.onSetCurentlyPlaying(track);
             // this.audio.src = 'http://localhost:4004/music/' + track.path;
-            window.$audio.src = 'http://localhost:4004/music/' + track.path;
+            window.$audio.src = process.env.REACT_APP_SERVER_MUSIC_URL + track.path;
         };
 
 
@@ -79,7 +79,7 @@ class Audio extends Component {
             }
         }
 
-        
+
         this.playNextSong = () => {
             if(this.props.repeat) {
                 this.setTime(0);

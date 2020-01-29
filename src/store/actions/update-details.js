@@ -30,7 +30,7 @@ export const updateDetails = (inputData, token) => {
             }
         };        
         
-        axios.post('http://localhost:4004/graphql', graphqlQuery, axiosHeaders)
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery, axiosHeaders)
         .then(() => {
             const graphqlQuery = {
                 query: `
@@ -42,7 +42,7 @@ export const updateDetails = (inputData, token) => {
                 `,
                 variables: { id: +inputData.id }
             };
-            axios.post('http://localhost:4004/graphql', graphqlQuery).then(response => {
+            axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery).then(response => {
                 dispatch(updateDetailsSuccess(response.data.data.getUserDetails));
             })
             .catch(error => {
@@ -87,7 +87,7 @@ export const updatePassword = (inputData, token) => {
             }
         };        
         
-        axios.post('http://localhost:4004/graphql', graphqlQuery, axiosHeaders)
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery, axiosHeaders)
         .then(response => {
             dispatch(updatePasswordSuccess(response.data));
         })

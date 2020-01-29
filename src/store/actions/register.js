@@ -27,7 +27,7 @@ export const registerUser = userInput => {
                 email: userInput.email, password: userInput.password }
         };
 
-        axios.post('http://localhost:4004/graphql', graphqlQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery).then(response => {
             
             dispatch(registerSuccess(response.data.data));
             // dispatch(registerSuccess(response.data.data.createUser));

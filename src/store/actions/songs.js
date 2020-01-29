@@ -13,7 +13,7 @@ export const setInitialPlaylistToAllSongs = () => {
                 }
             `
         };
-        axios.post('http://localhost:4004/graphql', allSongsQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, allSongsQuery).then(response => {
             const allSongs = response.data.data.allSongs;
             // const albumId = allSongs[0].album;
             // const artistId = allSongs[0].artist;
@@ -50,7 +50,7 @@ const artistQuery = artistId => {
             `,
             variables: { id: +artistId }
         };
-        axios.post('http://localhost:4004/graphql', artistQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, artistQuery).then(response => {
             const result = response.data.data.artist;
             dispatch(artistQuerySuccess(result.name));
             // this.setState({ artistName: result.name });
@@ -77,7 +77,7 @@ const numOfSongsQuery = albumId => {
             `,
             variables: { id: +albumId }
         };
-        axios.post('http://localhost:4004/graphql', numOfSongsQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, numOfSongsQuery).then(response => {
             const numofsongs = response.data.data.numOfSongs
             dispatch(numOfSongsQuerySuccess(numofsongs));
             // this.setState({ numofsongs: response.data.data.numOfSongs });
@@ -106,7 +106,7 @@ const albumQuery = albumId => {
             `,
             variables: { id: +albumId }
         };
-        axios.post('http://localhost:4004/graphql', albumQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, albumQuery).then(response => {
             const result = response.data.data.album;
             dispatch(albumQuerySuccess(result.title, result.artworkPath));
             // this.setState({ artwork: result.artworkPath, albumTitle: result.title, artistId: result.artist });
@@ -136,7 +136,7 @@ const albumSongsQuery = albumId => {
             `,
             variables: { id: +albumId }
         };
-        axios.post('http://localhost:4004/graphql', albumSongsQuery).then(response => {
+        axios.post(process.env.REACT_APP_GRAPHQL_URL, albumSongsQuery).then(response => {
             const result = response.data.data.albumSongs;
             dispatch(albumSongsQuerySuccess(result));
             // this.setState({ songs: result });

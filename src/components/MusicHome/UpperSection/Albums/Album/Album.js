@@ -10,7 +10,7 @@ const Album = props => {
     <div className="album-container" onClick={() => props.clicked(props.albumId, props.artistId)}>
         <div className="album-pic">
             
-            <img className="playlist-img" src={"http://localhost:4004/artwork/" + props.pic} alt="" />
+            <img className="playlist-img" src={process.env.REACT_APP_SERVER_ARTWORK_URL + props.pic} alt="" />
 
         </div>
         <div className="album-name">

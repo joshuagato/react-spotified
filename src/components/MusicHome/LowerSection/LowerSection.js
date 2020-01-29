@@ -63,6 +63,31 @@ class LowerSection extends Component {
         });
 
 
+
+        
+
+        // This executes each seconds the playtime updates || To the extent that it breaks bounds in componentDidUpdate, even if the state does not fullfill the conditions for update
+        window.$audio.addEventListener('timeupdate', function() {
+            if(this.duration) {
+                thisComponent.updateTimeProgessBar(this);
+            }
+            
+        });
+        this.updateTimeProgessBar = audio => {
+            const currentTime = this.refs.currentTime;
+            const timeRemaining = this.refs.timeRemaining;
+            const progressBar = this.refs.progressBar;
+
+            const currentTimeValue = this.audioInstance.current.formatTime(audio.currentTime);
+            const timeRemainingValue = this.audioInstance.current.formatTime(audio.duration - audio.currentTime);
+            const progressBarValue = audio.currentTime / audio.duration * 100;
+
+            currentTime.innerHTML = currentTimeValue
+            timeRemaining.innerHTML = timeRemainingValue;
+            progressBar.style.width = progressBarValue + '%';
+        }
+
+
         // THE VOLUME CONTROL BAR
         const volumeBarCotainer = this.refs.volumeBarCotainer;
         volumeBarCotainer.addEventListener('mousedown', function() {
@@ -90,11 +115,23 @@ class LowerSection extends Component {
         document.addEventListener('mouseup', function() {
             this.mouseDown = false;
         });
+
+
+        window.$audio.addEventListener('volumechange', function() {
+            thisComponent.updateVolumeProgressBar(this);
+        });
+
+        this.updateVolumeProgressBar = audio => {
+            const volumeBar = this.refs.volumeBar;
+
+            const volume = audio.volume * 100;
+            volumeBar.style.width = volume + '%';
+        }
     }
 
     componentDidUpdate(prevProps, _) {
 
-        const thisComponent = this;
+        // const thisComponent = this;
 
         if(prevProps.songs !== this.props.songs) {
             const newPlaylist = this.props.songs;
@@ -116,39 +153,6 @@ class LowerSection extends Component {
                 const timeRemaining = this.refs.timeRemaining;
                 timeRemaining.innerHTML = duration;
             });
-
-            // This executes each seconds the playtime updates || To the extent that it breaks bounds in componentDidUpdate, even if the state does not fullfill the conditions for update
-            window.$audio.addEventListener('timeupdate', function() {
-                if(this.duration) {
-                    thisComponent.updateTimeProgessBar(this);
-                }
-                
-            });
-            this.updateTimeProgessBar = audio => {
-                const currentTime = this.refs.currentTime;
-                const timeRemaining = this.refs.timeRemaining;
-                const progressBar = this.refs.progressBar;
-
-                const currentTimeValue = this.audioInstance.current.formatTime(audio.currentTime);
-                const timeRemainingValue = this.audioInstance.current.formatTime(audio.duration - audio.currentTime);
-                const progressBarValue = audio.currentTime / audio.duration * 100;
-
-                currentTime.innerHTML = currentTimeValue
-                timeRemaining.innerHTML = timeRemainingValue;
-                progressBar.style.width = progressBarValue + '%';
-            }
-
-
-            window.$audio.addEventListener('volumechange', function() {
-                thisComponent.updateVolumeProgressBar(this);
-            });
-
-            this.updateVolumeProgressBar = audio => {
-                const volumeBar = this.refs.volumeBar;
-
-                const volume = audio.volume * 100;
-                volumeBar.style.width = volume + '%';
-            }
         }
     }
 
@@ -206,7 +210,7 @@ class LowerSection extends Component {
 
                     <div className="left">
                         <section className="album-art">
-                            {this.props.currentlyPlaying.artworkPath ? <img src={'http://localhost:4004/artwork/' + this.props.currentlyPlaying.artworkPath} alt="img" /> : 'loading...1'}
+                            {this.props.currentlyPlaying.artworkPath ? <img src={process.env.REACT_APP_SERVER_ARTWORK_URL + this.props.currentlyPlaying.artworkPath} alt="img" /> : 'loading...1'}
                         </section>
                         <section className="track-details">
                             {this.props.currentlyPlaying.title ? <span className="title">{this.props.currentlyPlaying.title}</span> : 'loading...'}
