@@ -33,10 +33,7 @@ class MusicHome extends Component {
        // I NEEED TO FIX A BUG HERE, THESE PROPERTIES MUST BE SET ON THE UPPERSECTION or LINKS RATHER
        // Prevent the links from getting highlighted when dragged
         const musicHomeContainer = this.refs.musicHome;
-        // musicHomeContainer.addEventListener('mousedown', this.preventBehaviour);
-		// musicHomeContainer.addEventListener('touchstart', this.preventBehaviour);
 		musicHomeContainer.addEventListener('mousemove', this.preventBehaviour);
-		musicHomeContainer.addEventListener('touchmove', this.preventBehaviour);
     }
 
     componentDidUpdate(prevProps, prevState) {

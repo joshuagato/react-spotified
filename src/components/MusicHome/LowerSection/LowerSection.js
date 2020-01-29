@@ -37,9 +37,7 @@ class LowerSection extends Component {
         // Prevent the control buttons from getting highlighted when dragged
         const musicPlayerContainer = this.refs.musicPlayer;
         musicPlayerContainer.addEventListener('mousedown', this.preventBehaviour);
-		// musicPlayerContainer.addEventListener('touchstart', this.preventBehaviour);
 		musicPlayerContainer.addEventListener('mousemove', this.preventBehaviour);
-		// musicPlayerContainer.addEventListener('touchmove', this.preventBehaviour);
 
         // THE MUSIC PLAYER PROGRESS BAR
         const progressBarContainer = this.refs.progressBarContainer;
