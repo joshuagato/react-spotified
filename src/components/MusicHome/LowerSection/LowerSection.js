@@ -37,8 +37,94 @@ class LowerSection extends Component {
         // Prevent the control buttons from getting highlighted when dragged
         const musicPlayerContainer = this.refs.musicPlayer;
         musicPlayerContainer.addEventListener('mousedown', this.preventBehaviour);
-		musicPlayerContainer.addEventListener('mousemove', this.preventBehaviour);
+        musicPlayerContainer.addEventListener('mousemove', this.preventBehaviour);
+        
 
+
+        // THE VOLUME CONTROL BAR
+        const volumeBarCotainer = this.refs.volumeBarCotainer;
+
+        const propsAudio = this.props.audio;
+        // console.log("DID-MOUNT-props.audio", propsAudio)
+        volumeBarCotainer.addEventListener('mousedown', function() {
+            this.mouseDown = true;
+        });
+        volumeBarCotainer.addEventListener('mousemove', function(event) {
+            if(this.mouseDown) {
+                const percentage = event.offsetX / this.clientWidth;
+
+                if(percentage >= 0 && percentage <= 1) {
+                    // this.props.audio.volume = percentage;
+                    propsAudio.volume = percentage;
+                }
+            }
+        });
+        volumeBarCotainer.addEventListener('mouseup', function(event) {
+            if(this.mouseDown) {
+                const percentage = event.offsetX / this.clientWidth;
+                this.mouseDown = false;
+
+                if(percentage >= 0 && percentage <= 1) {
+                    // this.props.audio.volume = percentage;
+                    propsAudio.volume = percentage;
+                }
+            }
+        });
+        document.addEventListener('mouseup', function() {
+            this.mouseDown = false;
+        });
+
+
+        this.props.audio.addEventListener('volumechange', function() {
+            thisComponent.updateVolumeProgressBar(this);
+        });
+
+        this.updateVolumeProgressBar = audio => {
+            const volumeBar = this.refs.volumeBar;
+
+            const volume = audio.volume * 100;
+            volumeBar.style.width = volume + '%';
+        }
+
+
+        
+
+
+        
+        // console.log("DID-MOUNT-audioInstance.current", this.audioInstance.current.props.audio)
+        // console.log("DID-MOUNT-props.audio", this.props.audio)
+    }
+
+    componentDidUpdate(prevProps, _) {
+
+        const thisComponent = this;
+
+        if(prevProps.songs !== this.props.songs) {
+            const newPlaylist = this.props.songs;
+            
+            this.audioInstance.current.setTrack(newPlaylist[0], newPlaylist, false);
+        }
+
+        if(prevProps.currentlyPlaying.id !== this.props.currentlyPlaying.id) {
+            // WE NEED TO FIX A BUG IN THE CURRENTLYPLAYING PROPS AND THEN PUT THE CANPLAY AUTO FUNCTION HERE
+            // THE CURRENTLYPLAYING PROPS CHANGES WHEN WE ENTER AN ALBUM, BUT IF A TRACK WAS PLAYING BEFORE WE ENTERED,
+            // IT DOES NOT STOP PLAYING, ALTHOUGH THE CURRPLAYN STATE CHANAGES; AND DUE TO THAT THE PLAYING BAR KEEPS
+            // UPDATING ITS VALUES EACH SECONDS, BUT DOES NOT REFLECT THE TRACK LOADED IN THE BOTTOM LEFT PANEL
+            // MAYBE WE HAVE TO BIND THE CURRPLAYN PROP TO this.props.audio OBJECT
+
+            // This executes each each time there is a component update that affects the currentlyPlaying global state
+            this.props.audio.addEventListener('canplay', () => {
+                let duration = this.audioInstance.current.formatTime(this.props.audio.duration);
+
+                const timeRemaining = this.refs.timeRemaining;
+                timeRemaining.innerHTML = duration;
+            });
+        }
+
+
+
+
+        
         // THE MUSIC PLAYER PROGRESS BAR
         const progressBarContainer = this.refs.progressBarContainer;
         // If we use anonymous arrow function, 'this' will refer to the <LowerSection /> component
@@ -60,12 +146,8 @@ class LowerSection extends Component {
             this.mouseDown = false;
         });
 
-
-
-        
-
         // This executes each seconds the playtime updates || To the extent that it breaks bounds in componentDidUpdate, even if the state does not fullfill the conditions for update
-        window.$audio.addEventListener('timeupdate', function() {
+        this.props.audio.addEventListener('timeupdate', function() {
             if(this.duration) {
                 thisComponent.updateTimeProgessBar(this);
             }
@@ -84,75 +166,17 @@ class LowerSection extends Component {
             timeRemaining.innerHTML = timeRemainingValue;
             progressBar.style.width = progressBarValue + '%';
         }
+        
 
 
-        // THE VOLUME CONTROL BAR
-        const volumeBarCotainer = this.refs.volumeBarCotainer;
-        volumeBarCotainer.addEventListener('mousedown', function() {
-            this.mouseDown = true;
-        });
-        volumeBarCotainer.addEventListener('mousemove', function(event) {
-            if(this.mouseDown) {
-                const percentage = event.offsetX / this.clientWidth;
-
-                if(percentage >= 0 && percentage <= 1) {
-                    window.$audio.volume = percentage;
-                }
-            }
-        });
-        volumeBarCotainer.addEventListener('mouseup', function(event) {
-            if(this.mouseDown) {
-                const percentage = event.offsetX / this.clientWidth;
-                this.mouseDown = false;
-
-                if(percentage >= 0 && percentage <= 1) {
-                    window.$audio.volume = percentage;
-                }
-            }
-        });
-        document.addEventListener('mouseup', function() {
-            this.mouseDown = false;
-        });
-
-
-        window.$audio.addEventListener('volumechange', function() {
-            thisComponent.updateVolumeProgressBar(this);
-        });
-
-        this.updateVolumeProgressBar = audio => {
-            const volumeBar = this.refs.volumeBar;
-
-            const volume = audio.volume * 100;
-            volumeBar.style.width = volume + '%';
-        }
+        // console.log("DID-UPDATE-audioInstance.current", this.audioInstance.current.props.audio)
+        // console.log("DID-UPDATE-props.audio", this.props.audio)
     }
 
-    componentDidUpdate(prevProps, _) {
+    
 
-        // const thisComponent = this;
 
-        if(prevProps.songs !== this.props.songs) {
-            const newPlaylist = this.props.songs;
-            
-            this.audioInstance.current.setTrack(newPlaylist[0], newPlaylist, false);
-        }
-
-        if(prevProps.currentlyPlaying.id !== this.props.currentlyPlaying.id) {
-            // WE NEED TO FIX A BUG IN THE CURRENTLYPLAYING PROPS AND THEN PUT THE CANPLAY AUTO FUNCTION HERE
-            // THE CURRENTLYPLAYING PROPS CHANGES WHEN WE ENTER AN ALBUM, BUT IF A TRACK WAS PLAYING BEFORE WE ENTERED,
-            // IT DOES NOT STOP PLAYING, ALTHOUGH THE CURRPLAYN STATE CHANAGES; AND DUE TO THAT THE PLAYING BAR KEEPS
-            // UPDATING ITS VALUES EACH SECONDS, BUT DOES NOT REFLECT THE TRACK LOADED IN THE BOTTOM LEFT PANEL
-            // MAYBE WE HAVE TO BIND THE CURRPLAYN PROP TO window.$audio OBJECT
-
-            // This executes each each time there is a component update that affects the currentlyPlaying global state
-            window.$audio.addEventListener('canplay', () => {
-                let duration = this.audioInstance.current.formatTime(window.$audio.duration);
-
-                const timeRemaining = this.refs.timeRemaining;
-                timeRemaining.innerHTML = duration;
-            });
-        }
-    }
+    
 
     // Prevent default behaviour of mousedown, mousemove, etc in music-player div
     preventBehaviour = event => {
@@ -180,7 +204,7 @@ class LowerSection extends Component {
         const percentage = mouse.offsetX / progressBar.clientWidth * 100;
         // let percentage = mouse.offsetX / parseFloat(getComputedStyle(progressBar, null).width.replace("px", "")) * 100; //also works perfectly
 
-        const seconds = window.$audio.duration * (percentage  / 100);
+        const seconds = this.props.audio.duration * (percentage  / 100);
         this.audioInstance.current.setTime(seconds);
     }
 
@@ -267,6 +291,7 @@ class LowerSection extends Component {
 
 const mapStateToProps = state => {
     return {
+        audio: state.musPlay.audio,
         songs: state.songs.songs,
         playing: state.musPlay.playing,
         shuffle: state.musPlay.shuffle,

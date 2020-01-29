@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
+    audio: document.createElement('audio'),
     playing: false,
     shuffle: false,
     repeat: false,

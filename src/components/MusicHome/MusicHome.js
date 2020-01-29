@@ -72,7 +72,7 @@ class MusicHome extends Component {
 
 
                 {/* Lower Section */}
-                <LowerSection artist="StoneBwoy" />
+                <LowerSection />
 
             </div>
         );

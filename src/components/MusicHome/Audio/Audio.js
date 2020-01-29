@@ -12,7 +12,7 @@ class Audio extends Component {
         window.$shufflePlaylist = [];
         window.$tempPlaylist = [];
         window.$currentIndex = 0;
-        window.$audio = document.createElement('audio');
+        // window.$audio = document.createElement('audio');
         // window.$shuffle = false;
         // window.$repeat = false;
 
@@ -23,7 +23,8 @@ class Audio extends Component {
         this.setAudioToPlay = track => {
             this.props.onSetCurentlyPlaying(track);
             // this.audio.src = 'http://localhost:4004/music/' + track.path;
-            window.$audio.src = process.env.REACT_APP_SERVER_MUSIC_URL + track.path;
+            // window.$audio.src = process.env.REACT_APP_SERVER_MUSIC_URL + track.path;
+            this.props.audio.src = process.env.REACT_APP_SERVER_MUSIC_URL + track.path;
         };
 
 
@@ -52,23 +53,23 @@ class Audio extends Component {
         };
 
         
-        window.$audio.addEventListener('ended', () => {
+        this.props.audio.addEventListener('ended', () => {
             this.playNextSong();
         });
 
 
         this.play = () => {
             this.props.onPlay();
-            window.$audio.play();
+            this.props.audio.play();
         };
         this.pause = () => {
             this.props.onPause();
-            window.$audio.pause();
+            this.props.audio.pause();
         };
 
 
         this.playPreviousSong = () => {
-            if(window.$audio.currentTime >= 3 || window.$currentIndex === 0) {
+            if(this.props.audio.currentTime >= 3 || window.$currentIndex === 0) {
                 this.setTime(0);
             }
             else {
@@ -99,11 +100,11 @@ class Audio extends Component {
         }
 
         this.setMute = () => {
-            window.$audio.muted = !window.$audio.muted;
+            this.props.audio.muted = !this.props.audio.muted;
         }
 
         this.setTime = seconds => {
-            window.$audio.currentTime = seconds;
+            this.props.audio.currentTime = seconds;
         };
         
         this.shuffleArray = a => {
@@ -134,6 +135,7 @@ class Audio extends Component {
 
 const mapStateToProps = state => {
     return {
+        audio: state.musPlay.audio,
         shuffle: state.musPlay.shuffle,
         repeat: state.musPlay.repeat
     };
