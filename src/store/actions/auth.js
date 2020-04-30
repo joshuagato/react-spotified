@@ -70,6 +70,7 @@ const authFail = error => {
     };
 };
 export const auth = (email, password) => {
+    console.log(process.env.REACT_APP_GRAPHQL_URL)
     return dispatch => {
         // We can dispatch authStart here, if for instance we want to implement a spinner
 

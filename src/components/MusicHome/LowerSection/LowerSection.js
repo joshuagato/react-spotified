@@ -221,6 +221,11 @@ class LowerSection extends Component {
         // this.audioInstance.current.audio.muted = !this.audioInstance.current.audio.muted;
     }
 
+    openSongsFromLeft = () => {
+        console.log("CLICKED", this.props.openSongsClickedValue)
+        this.props.onOpenSongsClicked();
+    }
+
 
     render() {
         return(
@@ -230,7 +235,7 @@ class LowerSection extends Component {
                 
                 <div className="music-player" ref="musicPlayer">
 
-                    <div className="left">
+                    <div className="left" onClick={this.openSongsFromLeft}>
                         <section className="album-art">
                             {this.props.currentlyPlaying.artworkPath ? <img src={process.env.REACT_APP_SERVER_ARTWORK_URL + this.props.currentlyPlaying.artworkPath} alt="img" /> : 'loading...1'}
                         </section>
@@ -297,6 +302,7 @@ const mapStateToProps = state => {
         shuffle: state.musPlay.shuffle,
         repeat: state.musPlay.repeat,
         mute: state.musPlay.mute,
+        openSongsClickedValue: state.musPlay.openSongsClickedValue,
         currentlyPlaying: state.musPlay.currentlyPlaying
     };
 }
@@ -306,7 +312,8 @@ const mapDispatchToProps = dispatch => {
         onShufflePressed: () => dispatch(actions.shufflePressed()),
         onRepeatPressed: () => dispatch(actions.repeatPressed()),
         onMutePressed: () => dispatch(actions.mutePressed()),
-        onSetInitialPlaylistToAllSongs: () => dispatch(actions.setInitialPlaylistToAllSongs())
+        onSetInitialPlaylistToAllSongs: () => dispatch(actions.setInitialPlaylistToAllSongs()),
+        onOpenSongsClicked: () => dispatch(actions.openSongsClicked())
     };
 }
 

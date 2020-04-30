@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     audio: document.createElement('audio'),
+    openSongsClickedValue: false,
     playing: false,
     shuffle: false,
     repeat: false,
@@ -28,6 +29,12 @@ const reducer = (state = initialState, action) => {
 
         case actionTypes.SET_CURRENTLY_PLAYING:
             return { ...state, currentlyPlaying: action.currentTrack };
+
+        case actionTypes.OPEN_SONGS_CLICKED:
+            return { ...state, openSongsClickedValue: true };
+
+        case actionTypes.SONGS_PAGE_LOADED:
+            return { ...state, openSongsClickedValue: false };
 
         case actionTypes.GET_AND_PUSH_ARTWORK_PATH:
             return { 

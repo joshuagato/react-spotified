@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Search.scss';
+import { withRouter } from 'react-router-dom';
 
 import ResultSection from './ResultSection/ResultSection';
 
@@ -15,7 +16,30 @@ class Search extends Component {
         }
     }
 
-    getSearchTerm = (event) => {
+    componentDidMount() {
+        const thisComponent = this;
+
+        const searchInput = this.refs.searchInput;
+        searchInput.focus();
+
+        searchInput.addEventListener('keyup', function(event) {
+            window.$timer = setTimeout(function() {
+                let searchValue = searchInput.value;
+                
+                const path = thisComponent.props.history.location;
+
+                let newPath = path.pathname + path.search;
+                newPath = newPath + '&term=' + searchValue;
+                
+                console.log(newPath)
+                // thisComponent.props.history.push();
+
+            }, 1000);
+        });
+    }
+    
+
+    getSearchTerm = event => {
 
         this.setState({ term: event.target.value });
 
@@ -32,7 +56,8 @@ class Search extends Component {
             <div className="search">
                 <section className="search-box">
                     <span>Search for a Song, Artist or Album.</span>
-                    <input type="search" placeholder="Start Typing..." value={this.state.term} onChange={this.getSearchTerm} />
+                    <input type="search" placeholder="Start Typing..." value={this.state.term} 
+                        onChange={this.getSearchTerm} ref="searchInput" />
                 </section>
 
                 {
@@ -49,4 +74,4 @@ class Search extends Component {
     }
 };
 
-export default Search;
+export default withRouter(Search);

@@ -88,3 +88,15 @@ export const mutePressed = () => {
         type: actionTypes.MUTE_BUTTON_PRESSED
     };
 }
+
+export const openSongsClicked = () => {
+    return {
+        type: actionTypes.OPEN_SONGS_CLICKED
+    }
+};
+
+export const songsPageLoaded = () => {
+    return {
+        type: actionTypes.SONGS_PAGE_LOADED
+    }
+};

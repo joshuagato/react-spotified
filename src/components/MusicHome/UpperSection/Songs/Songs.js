@@ -16,6 +16,7 @@ export class Songs extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.openSongsClickedValue)
         const albumId = new URLSearchParams(window.location.search).get('alid');
         const artistId = new URLSearchParams(window.location.search).get('arid');
 
@@ -95,7 +96,8 @@ const mapStateToProps = state => {
         albumArtwork: state.songs.albumArtwork,
         numofsongs: state.songs.numofsongs,
         artistName: state.songs.artistName,
-        currentlyPlaying: state.musPlay.currentlyPlaying
+        currentlyPlaying: state.musPlay.currentlyPlaying,
+        openSongsClickedValue: state.musPlay.openSongsClickedValue
     }
 }
 

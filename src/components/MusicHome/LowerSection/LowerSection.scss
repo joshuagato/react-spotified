@@ -28,6 +28,7 @@
             // height: 100%;  // I had to comment this line out before this div could be in center alignment
             color: #fff;
             display: flex;
+            cursor: pointer;
 
             @media(max-width: 575px) and (orientation: portrait) {
                 width: 50%;

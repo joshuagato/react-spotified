@@ -12,6 +12,7 @@ class Audio extends Component {
         window.$shufflePlaylist = [];
         window.$tempPlaylist = [];
         window.$currentIndex = 0;
+        window.$timer = '';
         // window.$audio = document.createElement('audio');
         // window.$shuffle = false;
         // window.$repeat = false;
