@@ -43,11 +43,7 @@ class App extends Component {
         </Switch>
       );
     }
-    return (
-      <div className="App">
-        { routes }
-      </div>
-    );
+    return (<div className="App">{routes}</div>);
   }
 }
 

@@ -18,79 +18,75 @@ import Audio from './Audio/Audio';
 
 class MusicHome extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.audioInstance = React.createRef();
-    }
+  constructor(props) {
+    super(props);
+    this.audioInstance = React.createRef();
+  }
 
     componentDidMount() {
-        if(this.props.location.search === '') this.props.history.push('/music-home?browse');
+      if (this.props.location.search === '') this.props.history.push('/music-home?browse');
         
-        // Fetching the logged in user's details
-       this.props.onFetchUser(this.props.userId);
+      // Fetching the logged in user's details
+      this.props.onFetchUser(this.props.userId);
 
-       // I NEEED TO FIX A BUG HERE, THESE PROPERTIES MUST BE SET ON THE UPPERSECTION or LINKS RATHER
-       // Prevent the links from getting highlighted when dragged
-        const musicHomeContainer = this.refs.musicHome;
-		musicHomeContainer.addEventListener('mousemove', this.preventBehaviour);
+      // I NEEED TO FIX A BUG HERE, THESE PROPERTIES MUST BE SET ON THE UPPERSECTION or LINKS RATHER
+      // Prevent the links from getting highlighted when dragged
+      const musicHomeContainer = this.refs.musicHome;
+      musicHomeContainer.addEventListener('mousemove', this.preventBehaviour);
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.userData.firstname !== this.props.userData.firstname || 
-            prevProps.userData.lastname !== this.props.userData.lastname) {
-                
-                this.props.onFetchUser(this.props.userId);
-            }
+      if (prevProps.userData.firstname !== this.props.userData.firstname || 
+        prevProps.userData.lastname !== this.props.userData.lastname) {
+        this.props.onFetchUser(this.props.userId);
+      }
     }
 
     // Prevent default behaviour of mousedown, mousemove, etc in music-player div
     preventBehaviour = event => {
-        event.preventDefault();
+      event.preventDefault();
     }
 
     render() {
-        // I NEEED TO FIX A BUG HERE || I'VE FIXED IT
-        let param = this.props.location.search;
+      // I NEEED TO FIX A BUG HERE || I'VE FIXED IT
+      let param = this.props.location.search;
 
-        return (
-            <div className="music-home" ref="musicHome">
-                <Audio ref={this.audioInstance} />
+      return (
+        <div className="music-home" ref="musicHome">
+          <Audio ref={this.audioInstance} />
 
-                <div className="fixed-bar">
-                    <section className="mobile-nav">
-                        <NavLink to='/music-home?albums'><FontAwesomeIcon icon={faHome} /></NavLink>
-                        <NavLink to='/music-home?search'><FontAwesomeIcon icon={faSearch} /></NavLink>
-                        <NavLink to='/music-home?browse'><FontAwesomeIcon icon={faPlay} /></NavLink>
-                        <NavLink to='/music-home?playlists'><FontAwesomeIcon icon={faListAlt} /></NavLink>
-                        <NavLink to='/music-home?settings'><FontAwesomeIcon icon={faUserAlt} /></NavLink>
-                    </section>
-                </div>
+          <div className="fixed-bar">
+            <section className="mobile-nav">
+              <NavLink to='/music-home?albums'><FontAwesomeIcon icon={faHome} /></NavLink>
+              <NavLink to='/music-home?search'><FontAwesomeIcon icon={faSearch} /></NavLink>
+              <NavLink to='/music-home?browse'><FontAwesomeIcon icon={faPlay} /></NavLink>
+              <NavLink to='/music-home?playlists'><FontAwesomeIcon icon={faListAlt} /></NavLink>
+              <NavLink to='/music-home?settings'><FontAwesomeIcon icon={faUserAlt} /></NavLink>
+            </section>
+          </div>
 
-                {/* Upper Section */}
-                <UpperSection urlParam={param} name={this.props.userData} />
+          {/* Upper Section */}
+          <UpperSection urlParam={param} name={this.props.userData} />
 
-
-                {/* Lower Section */}
-                <LowerSection />
-
-            </div>
-        );
+          {/* Lower Section */}
+          <LowerSection />
+        </div>
+      );
     }
 }
 
 const mapStateToProps = state => {
-    return {
-        userId: state.auth.userId,
-        userData: state.userDet.userDataForAll,
-        // userData: state.userDet.userDataForHome,
-    };
+  return {
+    userId: state.auth.userId,
+    userData: state.userDet.userDataForAll,
+    // userData: state.userDet.userDataForHome,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        onFetchUser: userId => dispatch(actions.fetchUserForMusicHome(userId)),
-    };
+  return {
+    onFetchUser: userId => dispatch(actions.fetchUserForMusicHome(userId)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(MusicHome);

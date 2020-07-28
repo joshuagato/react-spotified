@@ -18,21 +18,21 @@ import songsReducer from './store/reducers/songs';
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
-    auth: authReducer,
-    regis: registerReducer,
-    userDet: userDetailsReducer,
-    musPlay: musicPlayerReducer,
-    songs: songsReducer
+  auth: authReducer,
+  regis: registerReducer,
+  userDet: userDetailsReducer,
+  musPlay: musicPlayerReducer,
+  songs: songsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 const app = (
-    <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </Provider>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
 );
 
 // ReactDOM.render(<App />, document.getElementById('root'));

@@ -10,59 +10,58 @@ import axios from 'axios';
 
 class Albums extends Component {
 
-    state = {
-        albums: []
-    }
+  state = {
+    albums: []
+  }
 
-    componentDidMount() {
-        const graphqlQuery = {
-            query: `
-                {
-                    albums {
-                        id title artist artworkPath
-                    }
-                }
-            `
-        };
-        axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery).then(response => {
-            this.setState({ albums: response.data.data.albums });
-        })
-        .catch(error => console.log(error));
-    }
+  componentDidMount() {
+    const graphqlQuery = {
+      query: `
+        {
+          albums {
+            id title artist artworkPath
+          }
+        }
+      `
+    };
+    axios.post(process.env.REACT_APP_GRAPHQL_URL, graphqlQuery).then(response => {
+      this.setState({ albums: response.data.data.albums });
+    })
+    .catch(error => console.log(error));
+  }
 
-    openSongs = (albumId, artistId) => {
-        // this.props.history.push('/music-home?songs&alid=' + albumId + '&arid=' + artistId);
-        
-        const queryParams = [];
-        queryParams.push(encodeURIComponent('songs'));
-        queryParams.push(encodeURIComponent('alid') + '=' + encodeURIComponent(albumId));
-        queryParams.push(encodeURIComponent('arid') + '=' + encodeURIComponent(artistId));
-        
-        const queryString = queryParams.join('&');
+  openSongs = (albumId, artistId) => {
+    // this.props.history.push('/music-home?songs&alid=' + albumId + '&arid=' + artistId);
+    
+    const queryParams = [];
+    queryParams.push(encodeURIComponent('songs'));
+    queryParams.push(encodeURIComponent('alid') + '=' + encodeURIComponent(albumId));
+    queryParams.push(encodeURIComponent('arid') + '=' + encodeURIComponent(artistId));
+    
+    const queryString = queryParams.join('&');
 
-        this.props.history.push({
-            pathname: '/music-home',
-            search: '?' + queryString
-        });
-    }
+    this.props.history.push({
+      pathname: '/music-home',
+      search: '?' + queryString
+    });
+  }
 
-    render() {
+  render() {
 
-        return (
-            <Auxil>
-                <h1 className="albums-heading">You might also like</h1>
-                <div className="albums">
-                    {
-                        this.state.albums.map(album => (
-                            <Album key={album.id} albumId={album.id} artistId={album.artist} pic={album.artworkPath} 
-                                name={album.title} clicked={this.openSongs} />
-                        ))
-                    }
-                </div>
-                
-            </Auxil>
-        );
-    }
+    return (
+      <Auxil>
+        <h1 className="albums-heading">You might also like</h1>
+        <div className="albums">
+          {
+            this.state.albums.map(album => (
+              <Album key={album.id} albumId={album.id} artistId={album.artist} pic={album.artworkPath} 
+                name={album.title} clicked={this.openSongs} />
+            ))
+          }
+        </div>
+      </Auxil>
+    );
+  }
 };
 
 export default withRouter(Albums);
