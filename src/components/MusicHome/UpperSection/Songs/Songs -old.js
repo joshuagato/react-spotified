@@ -26,7 +26,7 @@ export class Songs extends Component {
       // this comes as an array of just one item: That is the reason for the map method
       axios.get('http://localhost:8000/api/albums/' + albumId).then(response => {
         response.data.map(detail => {
-          this.setState({ artwork: detail.artworkPath, albumTitle: detail.title, artistId: detail.artist });
+          this.setState({ artwork: detail.artwork_path, albumTitle: detail.title, artistId: detail.artist });
           return detail;
         });
       }).catch(error => console.log(error));

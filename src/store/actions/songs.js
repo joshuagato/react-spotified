@@ -100,7 +100,7 @@ const albumQuery = albumId => {
       query: `
         query FetchAlbum($id: Int!) {
           album(albumId: $id) {
-            title artworkPath
+            title artwork_path
           }
         }
       `,
@@ -108,8 +108,8 @@ const albumQuery = albumId => {
     };
     axios.post(process.env.REACT_APP_GRAPHQL_URL, albumQuery).then(response => {
       const result = response.data.data.album;
-      dispatch(albumQuerySuccess(result.title, result.artworkPath));
-      // this.setState({ artwork: result.artworkPath, albumTitle: result.title, artistId: result.artist });
+      dispatch(albumQuerySuccess(result.title, result.artwork_path));
+      // this.setState({ artwork: result.artwork_path, albumTitle: result.title, artistId: result.artist });
     })
     .catch(error => console.log(error));
   }

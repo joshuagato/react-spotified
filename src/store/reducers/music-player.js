@@ -39,7 +39,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_AND_PUSH_ARTWORK_PATH:
       return { 
         ...state,
-        currentlyPlaying: { ...state.currentlyPlaying, artworkPath: action.artworkPath }
+        currentlyPlaying: { ...state.currentlyPlaying, artwork_path: action.artwork_path }
       }
 
     case actionTypes.GET_AND_PUSH_ARTIST_NAME:

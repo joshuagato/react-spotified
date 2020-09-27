@@ -53,7 +53,7 @@ class LowerSection extends Component {
       }
     });
     volumeBarCotainer.addEventListener('mouseup', function(event) {
-      if(this.mouseDown) {
+      if (this.mouseDown) {
         const percentage = event.offsetX / this.clientWidth;
         this.mouseDown = false;
 
@@ -198,7 +198,7 @@ class LowerSection extends Component {
         <div className="music-player" ref="musicPlayer">
           <div className="left" onClick={this.openSongsFromLeft}>
             <section className="album-art">
-              {this.props.currentlyPlaying.artworkPath ? <img src={process.env.REACT_APP_SERVER_ARTWORK_URL + this.props.currentlyPlaying.artworkPath} alt="img" /> : 'loading...1'}
+              {this.props.currentlyPlaying.artwork_path ? <img src={process.env.REACT_APP_SERVER_ARTWORK_URL + this.props.currentlyPlaying.artwork_path} alt="img" /> : 'loading...1'}
             </section>
             <section className="track-details">
               {this.props.currentlyPlaying.title ? <span className="title">{this.props.currentlyPlaying.title}</span> : 'loading...'}

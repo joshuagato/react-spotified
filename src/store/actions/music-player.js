@@ -10,7 +10,7 @@ export const setCurentlyPlaying = track => {
       query: `
         query FetchAlbum($id: Int!) {
           album(albumId: $id) {
-            artworkPath
+            artwork_path
           }
         }
       `,
@@ -18,7 +18,7 @@ export const setCurentlyPlaying = track => {
     };
     axios.post(process.env.REACT_APP_GRAPHQL_URL, albumQuery).then(response => {
       const result = response.data.data.album;
-      dispatch(getAndPushArtworkPath(result.artworkPath));
+      dispatch(getAndPushArtworkPath(result.artwork_path));
     })
     .catch(error => console.log(error));
 
@@ -51,7 +51,7 @@ const getAndPushArtistName = name => {
 const getAndPushArtworkPath = artwork => {
   return {
     type: actionTypes.GET_AND_PUSH_ARTWORK_PATH,
-    artworkPath: artwork
+    artwork_path: artwork
   }
 }
 

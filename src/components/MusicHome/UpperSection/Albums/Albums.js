@@ -19,7 +19,7 @@ class Albums extends Component {
       query: `
         {
           albums {
-            id title artist artworkPath
+            id title artist artwork_path
           }
         }
       `
@@ -54,7 +54,7 @@ class Albums extends Component {
         <div className="albums">
           {
             this.state.albums.map(album => (
-              <Album key={album.id} albumId={album.id} artistId={album.artist} pic={album.artworkPath} 
+              <Album key={album.id} albumId={album.id} artistId={album.artist} pic={album.artwork_path} 
                 name={album.title} clicked={this.openSongs} />
             ))
           }
