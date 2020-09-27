@@ -35,7 +35,7 @@
     "react-render-image": "^1.1.3",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "^3.4.1",
     "react-test-renderer": "^16.12.0",
     "react-typed": "^1.2.0",
     "redux": "^4.0.4",

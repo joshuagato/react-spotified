@@ -28,7 +28,6 @@ export const fetchUserForMusicHome = userId => {
 };
 
 
-
 const fetchUserForUpdateDetailsSuccess = userDetails => {
     return {
         type: actionTypes.FETCH_USER_FOR_UPDATE_SUCCESS,

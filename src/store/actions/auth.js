@@ -11,7 +11,6 @@ export const logout = () => {
 };
 
 
-
 const checkAuthTimeout = expirationTime => {
   return dispatch => {
     setTimeout(() => {
@@ -40,7 +39,6 @@ export const authCheckState = () => {
 };
 
 
-
 // we can also export it, so as to dispatch it in the Login component
 const setAuthRedirectPath = path => {
   return {
@@ -48,7 +46,6 @@ const setAuthRedirectPath = path => {
     path: path
   };
 };
-
 
 
 const authSuccess = (token, userId) => {
