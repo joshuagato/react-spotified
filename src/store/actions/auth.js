@@ -90,7 +90,7 @@ export const auth = (email, password) => {
     })
     .catch(error => {
       // console.log(error.response.data.errors[0].message); //we can map through this array
-      console.log("error", error.response);
+      if (error.response) console.log("error", error.response);
       
       dispatch(authFail(error.response));
     });
